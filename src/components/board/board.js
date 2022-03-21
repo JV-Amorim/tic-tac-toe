@@ -3,50 +3,18 @@ import './board.css';
 import Square from '../square/square.js';
 
 class Board extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      squares: Array(9).fill(null),
-      xIsNext: true
-    };
-  }
-
-  handleClick(i) {
-    const squares = this.state.squares.slice();
-
-    if (squares[i] || this.props.winner) {
-      return;
-    }
-
-    squares[i] = this.getNextPlayerCharacter();    
-    this.setState({
-      squares: squares,
-      xIsNext: !this.state.xIsNext
-    });
-
-    this.props.onSquareValueChange(squares);
-  }
-
-  getNextPlayerCharacter() {
-    return this.state.xIsNext ? 'X' : 'O';
-  }
-
-  renderSquare(i) {
+  renderSquare(index) {
     return (
       <Square
-        value={this.state.squares[i]}
-        onClick={() => this.handleClick(i)}
+        value={this.props.squares[index]}
+        onClick={() => this.props.onSquareClick(index)}
       />
     );
   }
 
   render() {
-    const winner = this.props.winner;
-    const status = winner ? `Winner: ${winner}` : `Next player: ${this.getNextPlayerCharacter()}`;
-
     return (
       <div>
-        <div className="status">{status}</div>
         <div className="board-row">
           {this.renderSquare(0)}
           {this.renderSquare(1)}
