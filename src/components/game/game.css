@@ -1,0 +1,25 @@
+ol, ul {
+  padding-left: 30px;
+}
+
+li button {
+  width: 150px;
+  text-align: left;
+}
+
+li.current, li.current button {
+  font-weight: 600;
+}
+
+.status {
+  margin-bottom: 10px;
+}
+
+.game {
+  display: flex;
+  flex-direction: row;
+}
+
+.game-info {
+  margin-left: 20px;
+}
