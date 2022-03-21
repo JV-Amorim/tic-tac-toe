@@ -20,6 +20,7 @@ class Game extends React.Component {
       history: [{
         squares: Array(9).fill(null)
       }],
+      currentMove: 0,
       xIsNext: true,
       winner: null
     };
@@ -33,18 +34,20 @@ class Game extends React.Component {
     }
 
     squares[squareIndex] = this.getNextPlayerCharacter();
+    
+    const history = this.state.history.slice(0, this.state.currentMove + 1);
 
     this.setState({
-      history: this.state.history.concat([{ squares }]),
+      history: history.concat([{ squares }]),
+      currentMove: history.length,
       xIsNext: !this.state.xIsNext,
       winner: this.calculateWinner(squares)
     });
   }
 
   getCurrentSquares() {
-    const history = this.state.history;
-    const lastHistoryData = history[history.length - 1];
-    return lastHistoryData.squares;
+    const currentHistoryData = this.state.history[this.state.currentMove];
+    return currentHistoryData.squares;
   }
 
   getNextPlayerCharacter() {
@@ -61,6 +64,25 @@ class Game extends React.Component {
     return null;
   }
 
+  renderMoveListItems() {
+    const moves = this.state.history.map((_, move) => {
+      const description = move ? `Go to move #${move}` : 'Go to game start';
+      return (
+        <li key={move}>
+          <button onClick={() => this.jumpToMove(move)}>{description}</button>
+        </li>
+      );
+    });
+    return <>{moves}</>;
+  }
+
+  jumpToMove(move) {
+    this.setState({
+      currentMove: move,
+      xIsNext: (move % 2) === 0
+    });
+  }
+
   render() {
     const winner = this.state.winner;
     const status = winner ? `Winner: ${winner}` : `Next player: ${this.getNextPlayerCharacter()}`;
@@ -75,7 +97,7 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{/* TODO */}</ol>
+          <ol>{this.renderMoveListItems()}</ol>
         </div>
       </div>
     );
